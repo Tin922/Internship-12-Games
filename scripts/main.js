@@ -3,6 +3,7 @@ import { getTopRatedGames } from "./api.js";
 const firstTaskContainer = document.querySelector(
   "#first_task .games_container"
 );
+
 function createGameInfo(game) {
   if (game.background_image == null)
     game.background_image = "./assets/no_image.png";
@@ -21,5 +22,6 @@ function appendGames(games, container) {
     container.appendChild(card);
   }
 }
+
 let games = await getTopRatedGames();
 appendGames(games, firstTaskContainer);
