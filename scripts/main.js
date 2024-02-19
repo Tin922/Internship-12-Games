@@ -1,8 +1,18 @@
-import { getTopRatedGames } from "./api.js";
+import {
+  getTopRatedGames,
+  getSerachedGames,
+  fetchDataPlatforms,
+  fetchDataPlatformsUserInput,
+} from "./api.js";
+import { promptForPlatforms } from "./input.js";
 
 const firstTaskContainer = document.querySelector(
   "#first_task .games_container"
 );
+const secondTaskContainer = document.querySelector(
+  "#second_task .games_container"
+);
+const search_games_button = document.querySelector(".search_games_button");
 
 function createGameInfo(game) {
   if (game.background_image == null)
@@ -23,5 +33,24 @@ function appendGames(games, container) {
   }
 }
 
-let games = await getTopRatedGames();
-appendGames(games, firstTaskContainer);
+async function searchByPlatforms(platforms) {
+  const platformsArray = [];
+  for (const platform of platforms) {
+    platformsArray.push(platform.name);
+  }
+  alert(`Top 10 platformi su: ${platformsArray}`);
+  const userRequestedPlatformsIds = promptForPlatforms(platforms);
+  console.log(userRequestedPlatformsIds);
+  const gamesByConsoles = await fetchDataPlatformsUserInput(
+    userRequestedPlatformsIds
+  );
+  console.log(gamesByConsoles);
+}
+
+appendGames(await getTopRatedGames(), firstTaskContainer);
+search_games_button.addEventListener("click", async () => {
+  search_games_button.style.display = "none";
+  appendGames(await getSerachedGames(), secondTaskContainer);
+});
+
+searchByPlatforms(await fetchDataPlatforms());

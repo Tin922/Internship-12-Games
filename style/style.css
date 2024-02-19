@@ -15,3 +15,8 @@ h2 {
   flex-wrap: wrap;
   flex-direction: column;
 }
+.search_games_button_outer_container {
+  display: flex;
+  justify-content: center;
+  margin: 4rem 0;
+}

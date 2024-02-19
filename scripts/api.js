@@ -1,5 +1,7 @@
+import { getUserInput } from "./input.js";
 const baseUrl = "https://api.rawg.io/api/games";
 const apiKey = "464bc085dbbf4f33bcb2ccb39d36a6ec";
+const baseUrlPlatforms = "https://api.rawg.io/api/platforms";
 
 function isGameSafe(game) {
   if (game.esrb_rating == null || game.esrb_rating.id == 5) {
@@ -20,5 +22,42 @@ async function getTopRatedGames() {
   const games = await FetchData(`${url}`);
   return games;
 }
+async function getSerachedGames() {
+  const userInput = getUserInput("Unesite ime igre koju zelite pretraziti");
+  const url = `${baseUrl}?key=${apiKey}&search=${userInput}`;
+  const games = await FetchData(`${url}`);
+  console.log(games);
+  games.sort((a, b) => {
+    return new Date(b.released) - new Date(a.released);
+  });
+  console.log(games);
+  return games.slice(0, 10);
+}
+async function fetchDataPlatforms() {
+  try {
+    const response = await fetch(`${baseUrlPlatforms}?key=${apiKey}`);
+    const data = await response.json();
+    data.results.sort((a, b) => b.games_count - a.games_count);
+    return data.results.slice(0, 10);
+  } catch (error) {
+    console.log(error);
+  }
+}
+async function fetchDataPlatformsUserInput(ids) {
+  try {
+    const response = await fetch(`${baseUrl}?key=${apiKey}&platforms=${ids}`);
+    const data = await response.json();
+    data.results.sort((a, b) => b.games_count - a.games_count);
+    console.log(data.results);
+    return data.results.fliter(isGameSafe).slice(0, 10);
+  } catch (error) {
+    console.log(error);
+  }
+}
 
-export { getTopRatedGames };
+export {
+  getTopRatedGames,
+  getSerachedGames,
+  fetchDataPlatforms,
+  fetchDataPlatformsUserInput,
+};
