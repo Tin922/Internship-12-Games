@@ -1,4 +1,4 @@
-import { getUserInput } from "./input.js";
+import { getUserInput, promptForValidNumber } from "./input.js";
 const baseUrl = "https://api.rawg.io/api/games";
 const apiKey = "464bc085dbbf4f33bcb2ccb39d36a6ec";
 const baseUrlPlatforms = "https://api.rawg.io/api/platforms";
@@ -55,10 +55,23 @@ async function fetchDataPlatformsUserInput(ids) {
     console.log(error);
   }
 }
+async function fetchDataWithGameId(searchedGameId) {
+  try {
+    const response = await fetch(`${baseUrl}?key=${apiKey}`);
+    const data = await response.json();
+    const games = data.results.filter(isGameSafe);
+    console.log(games);
+    const searchedGame = games.find((el) => el.id === searchedGameId);
+    return searchedGame;
+  } catch (error) {
+    console.log(error);
+  }
+}
 
 export {
   getTopRatedGames,
   getSerachedGames,
   fetchDataPlatforms,
   fetchDataPlatformsUserInput,
+  fetchDataWithGameId,
 };

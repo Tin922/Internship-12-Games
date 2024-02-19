@@ -24,4 +24,14 @@ function promptForPlatforms(platforms) {
 
   return validSelectedPlatformIds;
 }
-export { getUserInput, promptForPlatforms };
+function promptForValidNumber() {
+  let userInput;
+  do {
+    userInput = prompt("Upisite ID igre:");
+    const number = parseFloat(userInput);
+    if (!isNaN(number) && number > 0) {
+      return number;
+    }
+  } while (true);
+}
+export { getUserInput, promptForPlatforms, promptForValidNumber };
