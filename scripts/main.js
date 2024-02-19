@@ -9,12 +9,14 @@ import {
   fetchDevelopers,
   getGamesByDeveloper,
   getGamesByStartAndEndDate,
+  getGamesByMinAndMaxMetacriticRating,
 } from "./api.js";
 import {
   promptForDevelopers,
   promptForPlatforms,
   promptForValidNumber,
   promptForDates,
+  promptForMetacriticScores,
 } from "./input.js";
 
 const firstTaskContainer = document.querySelector(
@@ -38,6 +40,9 @@ const sixthTaskContainer = document.querySelector(
 const seventhTaskContainer = document.querySelector(
   "#seventh_task .game_contianer"
 );
+const eighthTaskContainer = document.querySelector(
+  "#eighth_task .game_contianer"
+);
 
 const search_games_button = document.querySelector(".search_games_button");
 const search_games_button_2 = document.querySelector(".search_games_button_2");
@@ -45,10 +50,13 @@ const search_games_button_3 = document.querySelector(".search_games_button_3");
 const search_games_button_4 = document.querySelector(".search_games_button_4");
 const search_games_button_5 = document.querySelector(".search_games_button_5");
 const search_games_button_6 = document.querySelector(".search_games_button_6");
+const search_games_button_7 = document.querySelector(".search_games_button_7");
 
 function createGameInfo(game) {
   if (game.background_image == null)
     game.background_image = "./assets/no_image.png";
+  if (game.metacritic == null) game.metacritic = "nije ocijenjena";
+  if (game.rating == 0) game.rating = "nije ocijenjena";
   return `<div class="game_info">          
           <h4>${game.name}</h4>
           <p>Datum izlaska: ${game.released}</p>
@@ -80,7 +88,6 @@ function searchByPlatforms(platforms) {
   }
   alert(`Top 10 platformi su: ${platformsArray}`);
   const userRequestedPlatformsIds = promptForPlatforms(platforms);
-  console.log(userRequestedPlatformsIds);
   return userRequestedPlatformsIds;
 }
 
@@ -177,8 +184,7 @@ function createStoreInfo(store) {
   if (store.image_background == null)
     store.image_background = "./assets/no_image.png";
   return `<div class="store_info">          
-          <h4>${store.name}</h4>
-          <p>Ime dućana: ${store.name}</p>
+          <h4>${store.name}</h4>         
           <p>Broj igrica: ${store.games_count}</p>
           <img src="${store.image_background}" alt="${store.name}"/>
         </div>`;
@@ -216,4 +222,14 @@ search_games_button_6.addEventListener("click", async () => {
     await getGamesByStartAndEndDate(startDate, endDate),
     seventhTaskContainer
   );
+});
+search_games_button_7.addEventListener("click", async () => {
+  eighthTaskContainer.innerHTML = "";
+  let { minRating, maxRating } = promptForMetacriticScores();
+  const gamesInMetacriticRange = await getGamesByMinAndMaxMetacriticRating(
+    minRating,
+    maxRating
+  );
+
+  appendGames(gamesInMetacriticRange, eighthTaskContainer);
 });

@@ -134,6 +134,27 @@ async function getGamesByStartAndEndDate(startDate, endDate) {
   }
 }
 
+async function getGamesByMinAndMaxMetacriticRating(minRating, maxRating) {
+  try {
+    const response = await fetch(
+      `${baseUrl}?key=${apiKey}&metacritic=${minRating},${maxRating}`
+    );
+    const data = await response.json();
+    const games = data.results.filter(isGameSafe);
+    if (games.length === 0)
+      alert("Ne postoje igre s tim metacritic rating rasponom");
+    games.sort((a, b) => {
+      if (b.metacritic !== a.metacritic) {
+        return b.metacritic - a.metacritic;
+      }
+      return a.name.localeCompare(b.name);
+    });
+    return games.slice(0, 20);
+  } catch (error) {
+    console.log(error);
+  }
+}
+
 export {
   getTopRatedGames,
   getSerachedGames,
@@ -145,4 +166,5 @@ export {
   fetchDevelopers,
   getGamesByDeveloper,
   getGamesByStartAndEndDate,
+  getGamesByMinAndMaxMetacriticRating,
 };

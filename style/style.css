@@ -70,3 +70,8 @@ p {
   align-items: center;
   flex-direction: column;
 }
+#eighth_task .game_contianer {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}

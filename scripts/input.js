@@ -66,6 +66,33 @@ function promptForDates() {
     }
   } while (true);
 }
+function promptForMetacriticScores() {
+  let minRating, maxRating;
+
+  do {
+    minRating = prompt("Upisite minimani metacritic rating:");
+    maxRating = prompt("Upisite maksimalni metacritic rating:");
+
+    minRating = Number(minRating);
+    maxRating = Number(maxRating);
+
+    if (
+      isNaN(minRating) ||
+      isNaN(maxRating) ||
+      minRating < 0 ||
+      minRating > 100 ||
+      maxRating < 0 ||
+      maxRating > 100 ||
+      minRating >= maxRating
+    ) {
+      alert(
+        "Minimalni rating ne smije biti veci od maksimalnog ratinga i rating treba biti između 1 i 100!"
+      );
+    } else {
+      return { minRating, maxRating };
+    }
+  } while (true);
+}
 
 export {
   getUserInput,
@@ -73,4 +100,5 @@ export {
   promptForValidNumber,
   promptForDevelopers,
   promptForDates,
+  promptForMetacriticScores,
 };
