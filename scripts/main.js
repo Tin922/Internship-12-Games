@@ -12,7 +12,11 @@ const firstTaskContainer = document.querySelector(
 const secondTaskContainer = document.querySelector(
   "#second_task .games_container"
 );
+const thirdTaskContainer = document.querySelector(
+  "#third_task .games_container"
+);
 const search_games_button = document.querySelector(".search_games_button");
+const search_games_button_2 = document.querySelector(".search_games_button_2");
 
 function createGameInfo(game) {
   if (game.background_image == null)
@@ -33,7 +37,7 @@ function appendGames(games, container) {
   }
 }
 
-async function searchByPlatforms(platforms) {
+function searchByPlatforms(platforms) {
   const platformsArray = [];
   for (const platform of platforms) {
     platformsArray.push(platform.name);
@@ -41,10 +45,7 @@ async function searchByPlatforms(platforms) {
   alert(`Top 10 platformi su: ${platformsArray}`);
   const userRequestedPlatformsIds = promptForPlatforms(platforms);
   console.log(userRequestedPlatformsIds);
-  const gamesByConsoles = await fetchDataPlatformsUserInput(
-    userRequestedPlatformsIds
-  );
-  console.log(gamesByConsoles);
+  return userRequestedPlatformsIds;
 }
 
 appendGames(await getTopRatedGames(), firstTaskContainer);
@@ -53,4 +54,13 @@ search_games_button.addEventListener("click", async () => {
   appendGames(await getSerachedGames(), secondTaskContainer);
 });
 
-searchByPlatforms(await fetchDataPlatforms());
+search_games_button_2.addEventListener("click", async () => {
+  search_games_button_2.style.display = "none";
+  const userRequestedPlatformsIds = searchByPlatforms(
+    await fetchDataPlatforms()
+  );
+  appendGames(
+    await fetchDataPlatformsUserInput(userRequestedPlatformsIds),
+    thirdTaskContainer
+  );
+});

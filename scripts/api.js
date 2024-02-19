@@ -47,9 +47,10 @@ async function fetchDataPlatformsUserInput(ids) {
   try {
     const response = await fetch(`${baseUrl}?key=${apiKey}&platforms=${ids}`);
     const data = await response.json();
-    data.results.sort((a, b) => b.games_count - a.games_count);
-    console.log(data.results);
-    return data.results.fliter(isGameSafe).slice(0, 10);
+    const games = data.results.filter(isGameSafe);
+    console.log(games);
+    games.sort((a, b) => a.name.localeCompare(b.name));
+    return games.slice(0, 20);
   } catch (error) {
     console.log(error);
   }

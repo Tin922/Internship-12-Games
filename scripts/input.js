@@ -1,7 +1,7 @@
 function getUserInput(promptMessage) {
   let userInput = prompt(`${promptMessage}`);
   while (userInput === null || userInput.trim() === "") {
-    userInput = prompt("Invalid input! Please enter a non-empty string:");
+    userInput = prompt("Neispravan unos!");
   }
   return userInput;
 }
@@ -13,7 +13,7 @@ function promptForPlatforms(platforms) {
 
   const selectedPlatformIds = selectedPlatformNames.map((platformName) => {
     const selectedPlatform = platforms.find(
-      (platform) => platform.name === platformName
+      (platform) => platform.name.toLowerCase() === platformName.toLowerCase()
     );
     return selectedPlatform ? selectedPlatform.id : null;
   });
