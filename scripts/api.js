@@ -3,6 +3,7 @@ const baseUrl = "https://api.rawg.io/api/games";
 const apiKey = "464bc085dbbf4f33bcb2ccb39d36a6ec";
 const baseUrlPlatforms = "https://api.rawg.io/api/platforms";
 const baseUrlStores = "https://api.rawg.io/api/stores";
+const baseUrlDevelopers = "https://api.rawg.io/api/developers";
 
 function isGameSafe(game) {
   if (game.esrb_rating == null || game.esrb_rating.id == 5) {
@@ -93,6 +94,31 @@ async function fetchAndFilterStoresWithId(storesId) {
     console.log(error);
   }
 }
+
+async function fetchDevelopers() {
+  try {
+    const response = await fetch(`${baseUrlDevelopers}?key=${apiKey}`);
+    const data = await response.json();
+    return data.results;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+async function getGamesByDeveloper(developer) {
+  try {
+    const response = await fetch(
+      `${baseUrl}?key=${apiKey}&developers=${developer.id}`
+    );
+    const data = await response.json();
+    const games = data.results.filter(isGameSafe);
+    games.sort((a, b) => b.rating - a.rating);
+    return games.slice(0, 10);
+  } catch (error) {
+    console.log(error);
+  }
+}
+
 export {
   getTopRatedGames,
   getSerachedGames,
@@ -101,4 +127,6 @@ export {
   fetchDataWithGameId,
   fetchStoresWithGameId,
   fetchAndFilterStoresWithId,
+  fetchDevelopers,
+  getGamesByDeveloper,
 };

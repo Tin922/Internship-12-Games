@@ -6,8 +6,14 @@ import {
   fetchDataWithGameId,
   fetchStoresWithGameId,
   fetchAndFilterStoresWithId,
+  fetchDevelopers,
+  getGamesByDeveloper,
 } from "./api.js";
-import { promptForPlatforms, promptForValidNumber } from "./input.js";
+import {
+  promptForDevelopers,
+  promptForPlatforms,
+  promptForValidNumber,
+} from "./input.js";
 
 const firstTaskContainer = document.querySelector(
   "#first_task .games_container"
@@ -24,10 +30,15 @@ const fourthTaskContainer = document.querySelector(
 const fifthTaskContainer = document.querySelector(
   "#fifth_task .store_container"
 );
+const sixthTaskContainer = document.querySelector(
+  "#sixth_task .game_contianer"
+);
+
 const search_games_button = document.querySelector(".search_games_button");
 const search_games_button_2 = document.querySelector(".search_games_button_2");
 const search_games_button_3 = document.querySelector(".search_games_button_3");
 const search_games_button_4 = document.querySelector(".search_games_button_4");
+const search_games_button_5 = document.querySelector(".search_games_button_5");
 
 function createGameInfo(game) {
   if (game.background_image == null)
@@ -36,6 +47,7 @@ function createGameInfo(game) {
           <h4>${game.name}</h4>
           <p>Datum izlaska: ${game.released}</p>
           <p>Metacritic ocjena: ${game.metacritic}</p>
+          <p>Rating: ${game.rating}</p>
           <img src="${game.background_image}" alt="${game.name}"/>
         </div>`;
 }
@@ -164,4 +176,29 @@ function createStoreInfo(store) {
           <p>Broj igrica: ${store.games_count}</p>
           <img src="${store.image_background}" alt="${store.name}"/>
         </div>`;
+}
+search_games_button_5.addEventListener("click", async () => {
+  sixthTaskContainer.innerHTML = "";
+  const developers = searchByDevelopers(await fetchDevelopers());
+  fetchGamesForDevelopers(developers, sixthTaskContainer);
+});
+
+async function fetchGamesForDevelopers(developers, container) {
+  for (const developer of developers) {
+    const developerName = document.createElement("h2");
+    developerName.textContent = developer.name;
+    container.appendChild(developerName);
+
+    const games = await getGamesByDeveloper(developer);
+    appendGames(games, container);
+  }
+}
+function searchByDevelopers(developers) {
+  const developersArray = [];
+  for (const developer of developers) {
+    developersArray.push(developer.name);
+  }
+  alert(`Developeri su: ${developersArray}`);
+  const userRequestedDevelopers = promptForDevelopers(developers);
+  return userRequestedDevelopers;
 }

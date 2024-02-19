@@ -57,3 +57,8 @@ h2 {
   align-items: center;
   flex-direction: column;
 }
+#sixth_task .game_contianer {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}

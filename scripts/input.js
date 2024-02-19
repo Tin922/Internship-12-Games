@@ -34,4 +34,24 @@ function promptForValidNumber() {
     }
   } while (true);
 }
-export { getUserInput, promptForPlatforms, promptForValidNumber };
+function promptForDevelopers(developers) {
+  const userInput = prompt("Unesite imena developera odvojena zarezima:");
+  const selectedDevelopers = userInput
+    .split(",")
+    .map((developer) => developer.trim());
+
+  const selectedDeveloperObjects = selectedDevelopers.map((developerName) => {
+    const selectedDeveloper = developers.find(
+      (developer) =>
+        developer.name.toLowerCase() === developerName.toLowerCase()
+    );
+    return selectedDeveloper;
+  });
+  return selectedDeveloperObjects;
+}
+export {
+  getUserInput,
+  promptForPlatforms,
+  promptForValidNumber,
+  promptForDevelopers,
+};
