@@ -4,6 +4,8 @@ import {
   fetchDataPlatforms,
   fetchDataPlatformsUserInput,
   fetchDataWithGameId,
+  fetchStoresWithGameId,
+  fetchAndFilterStoresWithId,
 } from "./api.js";
 import { promptForPlatforms, promptForValidNumber } from "./input.js";
 
@@ -19,9 +21,13 @@ const thirdTaskContainer = document.querySelector(
 const fourthTaskContainer = document.querySelector(
   "#fourth_task .games_container"
 );
+const fifthTaskContainer = document.querySelector(
+  "#fifth_task .store_container"
+);
 const search_games_button = document.querySelector(".search_games_button");
 const search_games_button_2 = document.querySelector(".search_games_button_2");
 const search_games_button_3 = document.querySelector(".search_games_button_3");
+const search_games_button_4 = document.querySelector(".search_games_button_4");
 
 function createGameInfo(game) {
   if (game.background_image == null)
@@ -117,4 +123,45 @@ function createStarRating(rating) {
     starRatingContainer.appendChild(emptyStar);
   }
   fourthTaskContainer.appendChild(starRatingContainer);
+}
+
+search_games_button_4.addEventListener("click", async () => {
+  fifthTaskContainer.innerHTML = "";
+  const searchedGameByIdForGettingStores = await fetchStoresWithGameId(
+    promptForValidNumber()
+  );
+  if (searchedGameByIdForGettingStores == undefined) {
+    alert(`Igra s tim id-em ne postoji`);
+    return;
+  }
+  appendStore(
+    await fetchAndFilterStoresWithId(searchedGameByIdForGettingStores),
+    fifthTaskContainer
+  );
+});
+
+function appendStore(stores, container) {
+  if (Array.isArray(stores)) {
+    for (const game of stores) {
+      const card = document.createElement("div");
+      card.classList.add("card");
+      card.innerHTML = createStoreInfo(game);
+      container.appendChild(card);
+    }
+  } else {
+    const card = document.createElement("div");
+    card.classList.add("card");
+    card.innerHTML = createStoreInfo(stores);
+    container.appendChild(card);
+  }
+}
+function createStoreInfo(store) {
+  if (store.image_background == null)
+    store.image_background = "./assets/no_image.png";
+  return `<div class="store_info">          
+          <h4>${store.name}</h4>
+          <p>Ime dućana: ${store.name}</p>
+          <p>Broj igrica: ${store.games_count}</p>
+          <img src="${store.image_background}" alt="${store.name}"/>
+        </div>`;
 }

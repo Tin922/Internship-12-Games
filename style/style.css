@@ -51,3 +51,9 @@ h2 {
   flex-direction: row;
   gap: 30px;
 }
+
+#fifth_task .store_container {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}

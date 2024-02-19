@@ -2,6 +2,7 @@ import { getUserInput, promptForValidNumber } from "./input.js";
 const baseUrl = "https://api.rawg.io/api/games";
 const apiKey = "464bc085dbbf4f33bcb2ccb39d36a6ec";
 const baseUrlPlatforms = "https://api.rawg.io/api/platforms";
+const baseUrlStores = "https://api.rawg.io/api/stores";
 
 function isGameSafe(game) {
   if (game.esrb_rating == null || game.esrb_rating.id == 5) {
@@ -30,7 +31,6 @@ async function getSerachedGames() {
   games.sort((a, b) => {
     return new Date(b.released) - new Date(a.released);
   });
-  console.log(games);
   return games.slice(0, 10);
 }
 async function fetchDataPlatforms() {
@@ -48,7 +48,6 @@ async function fetchDataPlatformsUserInput(ids) {
     const response = await fetch(`${baseUrl}?key=${apiKey}&platforms=${ids}`);
     const data = await response.json();
     const games = data.results.filter(isGameSafe);
-    console.log(games);
     games.sort((a, b) => a.name.localeCompare(b.name));
     return games.slice(0, 20);
   } catch (error) {
@@ -60,7 +59,6 @@ async function fetchDataWithGameId(searchedGameId) {
     const response = await fetch(`${baseUrl}?key=${apiKey}`);
     const data = await response.json();
     const games = data.results.filter(isGameSafe);
-    console.log(games);
     const searchedGame = games.find((el) => el.id === searchedGameId);
     return searchedGame;
   } catch (error) {
@@ -68,10 +66,39 @@ async function fetchDataWithGameId(searchedGameId) {
   }
 }
 
+async function fetchStoresWithGameId(searchedGameId) {
+  try {
+    const response = await fetch(
+      `${baseUrl}/${searchedGameId}/stores?key=${apiKey}`
+    );
+    const data = await response.json();
+    return data.results;
+  } catch (error) {
+    console.log(error);
+  }
+}
+async function fetchAndFilterStoresWithId(storesId) {
+  try {
+    const response = await fetch(`${baseUrlStores}?key=${apiKey}`);
+    const data = await response.json();
+    const storeIds = storesId.map(
+      (store) => store.store_id
+    ); /* get storesId from user input */
+    const filteredStores = data.results.filter((store) =>
+      storeIds.includes(store.id)
+    );
+    console.log(filteredStores);
+    return filteredStores;
+  } catch (error) {
+    console.log(error);
+  }
+}
 export {
   getTopRatedGames,
   getSerachedGames,
   fetchDataPlatforms,
   fetchDataPlatformsUserInput,
   fetchDataWithGameId,
+  fetchStoresWithGameId,
+  fetchAndFilterStoresWithId,
 };
