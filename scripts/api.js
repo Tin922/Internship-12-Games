@@ -119,6 +119,21 @@ async function getGamesByDeveloper(developer) {
   }
 }
 
+async function getGamesByStartAndEndDate(startDate, endDate) {
+  try {
+    const response = await fetch(
+      `${baseUrl}?key=${apiKey}&dates=${startDate},${endDate}`
+    );
+    const data = await response.json();
+    const games = data.results.filter(isGameSafe);
+    if (games.length === 0) alert("Ne postoje igre u tom periodu");
+    games.sort((a, b) => b.metacritic - a.metacritic);
+    return games.slice(0, 10);
+  } catch (error) {
+    console.log(error);
+  }
+}
+
 export {
   getTopRatedGames,
   getSerachedGames,
@@ -129,4 +144,5 @@ export {
   fetchAndFilterStoresWithId,
   fetchDevelopers,
   getGamesByDeveloper,
+  getGamesByStartAndEndDate,
 };

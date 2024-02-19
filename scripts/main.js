@@ -8,11 +8,13 @@ import {
   fetchAndFilterStoresWithId,
   fetchDevelopers,
   getGamesByDeveloper,
+  getGamesByStartAndEndDate,
 } from "./api.js";
 import {
   promptForDevelopers,
   promptForPlatforms,
   promptForValidNumber,
+  promptForDates,
 } from "./input.js";
 
 const firstTaskContainer = document.querySelector(
@@ -33,12 +35,16 @@ const fifthTaskContainer = document.querySelector(
 const sixthTaskContainer = document.querySelector(
   "#sixth_task .game_contianer"
 );
+const seventhTaskContainer = document.querySelector(
+  "#seventh_task .game_contianer"
+);
 
 const search_games_button = document.querySelector(".search_games_button");
 const search_games_button_2 = document.querySelector(".search_games_button_2");
 const search_games_button_3 = document.querySelector(".search_games_button_3");
 const search_games_button_4 = document.querySelector(".search_games_button_4");
 const search_games_button_5 = document.querySelector(".search_games_button_5");
+const search_games_button_6 = document.querySelector(".search_games_button_6");
 
 function createGameInfo(game) {
   if (game.background_image == null)
@@ -202,3 +208,12 @@ function searchByDevelopers(developers) {
   const userRequestedDevelopers = promptForDevelopers(developers);
   return userRequestedDevelopers;
 }
+
+search_games_button_6.addEventListener("click", async () => {
+  seventhTaskContainer.innerHTML = "";
+  let { startDate, endDate } = promptForDates();
+  appendGames(
+    await getGamesByStartAndEndDate(startDate, endDate),
+    seventhTaskContainer
+  );
+});

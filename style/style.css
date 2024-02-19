@@ -1,6 +1,9 @@
 h2 {
   text-align: center;
 }
+p {
+  text-align: center;
+}
 .card {
   max-width: 20%;
   margin-bottom: 2rem;
@@ -58,6 +61,11 @@ h2 {
   flex-direction: column;
 }
 #sixth_task .game_contianer {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+#seventh_task .game_contianer {
   display: flex;
   align-items: center;
   flex-direction: column;

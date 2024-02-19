@@ -49,9 +49,28 @@ function promptForDevelopers(developers) {
   });
   return selectedDeveloperObjects;
 }
+function promptForDates() {
+  let startDate, endDate;
+  let validFormat = /^\d{4}-\d{2}-\d{2}$/;
+
+  do {
+    startDate = prompt("Upisite pocetni datum (YYYY-MM-DD):");
+    endDate = prompt("Upisite krajni datum (YYYY-MM-DD):");
+
+    if (!validFormat.test(startDate) || !validFormat.test(endDate)) {
+      alert("Neispravan format! Upsite datume u obliku YYYY-MM-DD ");
+    } else if (startDate > endDate) {
+      alert("Pocetni datum ne moze biti poslije krajnog datuma!");
+    } else {
+      return { startDate, endDate };
+    }
+  } while (true);
+}
+
 export {
   getUserInput,
   promptForPlatforms,
   promptForValidNumber,
   promptForDevelopers,
+  promptForDates,
 };
